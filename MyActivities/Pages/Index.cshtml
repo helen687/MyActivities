@@ -1,0 +1,36 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="row">
+    <h4 class="mb-3 ml-5">Activities:</h4>
+</div>
+
+<table class="list">
+@foreach (var activity in Model.Activities)
+{
+        <tr id="tr_@activity.Id">
+            <td style="width: 300px;">
+                    <span id="span_@activity.Id">@activity.Name</span>
+                    <input type="text" id="input_@activity.Id" value="@activity.Name" style="display:none" />
+            </td>
+            <td>
+                    <button id="btn_@activity.Id" class="btn btn-primary" onclick="editCell('@activity.Id')">Edit</button>
+                    <button id="cancel_@activity.Id" class="btn btn-secondary" onclick="cancelEdit('@activity.Id')" style="display:none">Cancel</button>
+            </td>
+            <td>
+                <button id="del_@activity.Id" class="btn btn-primary btnDelete" onclick="deleteRow('@activity.Id', '@activity.Name')">Remove</button>
+            </td>
+            <td>
+                <p id="error_@activity.Id" class="error"></p>
+            </td>
+        </tr>
+}
+</table>
+<div class="row">
+    <div class="ml-5 mt-3">
+        <a href="javascript://" onclick="addNew()"> New activity</a>
+    </div>
+</div>
