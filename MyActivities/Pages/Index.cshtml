@@ -1,36 +1,26 @@
 ﻿@page
-@model IndexModel
+@model MyActivities.Pages.MyDayModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "My Day";
 }
-
-<div class="row">
-    <h4 class="mb-3 ml-5">Activities:</h4>
-</div>
-
-<table class="list">
+<table class="grid">
+    <tr>
+        <tr> 
+            <td></td>
+            @foreach (var day in Model.GetDays())
+            {
+            <td>@Model.DayToString(day)</td>
+            }
+        </tr>
+    </tr>
 @foreach (var activity in Model.Activities)
 {
-        <tr id="tr_@activity.Id">
-            <td style="width: 300px;">
-                    <span id="span_@activity.Id">@activity.Name</span>
-                    <input type="text" id="input_@activity.Id" value="@activity.Name" style="display:none" />
-            </td>
-            <td>
-                    <button id="btn_@activity.Id" class="btn btn-primary" onclick="editCell('@activity.Id')">Edit</button>
-                    <button id="cancel_@activity.Id" class="btn btn-secondary" onclick="cancelEdit('@activity.Id')" style="display:none">Cancel</button>
-            </td>
-            <td>
-                <button id="del_@activity.Id" class="btn btn-primary btnDelete" onclick="deleteRow('@activity.Id', '@activity.Name')">Remove</button>
-            </td>
-            <td>
-                <p id="error_@activity.Id" class="error"></p>
-            </td>
+        <tr>
+            <td>@activity.Name</td>
+            @foreach (var day in Model.GetDays())
+            {
+                <td align="center" class="@Model.GetTdClass(day)"><input type="checkbox" id="@Model.GetCheckboxId(activity, day)" @Model.ISChecked(activity, day) onclick="return checkDayActivity('@activity.Id', '@Model.DayToUniversalString(day)')" /></td>
+            }
         </tr>
 }
 </table>
-<div class="row">
-    <div class="ml-5 mt-3">
-        <a href="javascript://" onclick="addNew()"> New activity</a>
-    </div>
-</div>

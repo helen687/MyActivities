@@ -15,6 +15,9 @@ function editCell(id) {
         span.hide();
         input.val(span.html());
         input.show();
+        input.focus();
+        var strLength = input.val().length * 2;
+        input[0].setSelectionRange(strLength, strLength);
         cancel.show();
         deleteButtons.hide();
         button.html('Save');
@@ -79,10 +82,10 @@ function addNew() {
     var str = ` <tr id="tr_` + guid + `" isnew="true">
         <td style="width: 300px;">
                 <span id="span_` + guid + `"></span>
-                <input type="text" id="input_` + guid + `" value="" style="display:none" />
+                <input type="text" id="input_` + guid + `" value="" style="display:none" onkeydown="onInputKeyDown(event, '` + guid + `');" />
         </td>
         <td>
-                <button id="btn_` + guid + `" class="btn btn-primary" onclick="editCell('` + guid + `')">Edit</button>
+                <button id="btn_` + guid + `" class="btn btn-primary edit-save" onclick="editCell('` + guid + `')">Edit</button>
                 <button id="cancel_` + guid + `" class="btn btn-secondary" onclick="cancelEdit('` + guid + `')" style="display:none">Cancel</button>
         </td>
         <td>
@@ -126,7 +129,7 @@ function dateToString(day) {
 function checkDayActivity(activityId, day) {
     let objDate = new Date(day);
     let strDate = objDate.toISOString().split('T')[0];
-    alert(str);
+
     $.post({
         url: "/api/dayactivity/post/" + activityId + '/' + strDate,
         contentType: "application/json; charset=utf-8",
@@ -137,4 +140,14 @@ function checkDayActivity(activityId, day) {
             return false;
         }
     });
+}
+
+function onInputKeyDown(e, activityId) {
+    if (e.keyCode == 13) {
+        var btn = $("#btn_" + activityId);
+        btn.click();
+    }
+    else if (e.keyCode == 27 && $("#input_" + activityId).is(":visible")) {
+        cancelEdit(activityId);
+    }
 }
