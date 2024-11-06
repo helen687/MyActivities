@@ -1,20 +1,24 @@
 ﻿@page
-@model MyActivities.Pages.ActivitiesModel
+@model GymActivitiesModel
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="row">
-    <h4 class="mb-3 ml-5">Activities:</h4>
+    <h4 class="mb-3 ml-5">Gym Activities:</h4>
 </div>
 
 <table class="list">
-@foreach (var activity in Model.Activities)
+@foreach (var activity in Model.GymActivities)
 {
         <tr id="tr_@activity.Id">
             <td style="width: 300px;">
                 <span id="span_@activity.Id">@activity.Name</span>
                 <input type="text" id="input_@activity.Id" value="@activity.Name" style="display:none" onkeydown="onInputKeyDown(event, '@activity.Id')" />
+            </td>
+            <td class="weight">
+                <span id="span_weight_@activity.Id">@activity.Setting</span>
+                <input type="text" id="input_weight_@activity.Id" value="@activity.Setting" style="display:none" class="weight" onkeydown="onInputKeyDown(event, '@activity.Id')" />
             </td>
             <td>
                 <button id="btn_@activity.Id" class="btn btn-primary edit-save" onclick="editCell('@activity.Id')">Edit</button>
@@ -31,6 +35,6 @@
 </table>
 <div class="row">
     <div class="ml-5 mt-3">
-        <a href="javascript://" onclick="addNew(false)"> New activity</a>
+        <a href="javascript://" onclick="addNew(true)"> New activity</a>
     </div>
 </div>

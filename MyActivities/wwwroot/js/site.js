@@ -5,7 +5,9 @@
 
 function editCell(id) {
     var span = $("#span_" + id);
+    var spanWeight = $("#span_weight_" + id);
     var input = $("#input_" + id);
+    var inputWeight = $("#input_weight_" + id);
     var button = $("#btn_" + id);
     var cancel = $("#cancel_" + id);
     var err = $("#error_" + id);
@@ -16,6 +18,10 @@ function editCell(id) {
         input.val(span.html());
         input.show();
         input.focus();
+        if (spanWeight.length > 0) {
+            spanWeight.hide();
+            inputWeight.show();
+        }
         var strLength = input.val().length * 2;
         input[0].setSelectionRange(strLength, strLength);
         cancel.show();
@@ -24,13 +30,33 @@ function editCell(id) {
     }
     else {
         if (input.val() != "") {
-            $.post({
-                url: "/api/activity/post",
-                data: JSON.stringify({
+            var url = "/api/activity/post";
+            var data = {
+                "Id": id,
+                "Name": input.val(),
+                "IsDeleted": false
+            };
+
+            if (spanWeight.length = 0) {
+                url = "/api/activity/post";
+                data = {
                     "Id": id,
                     "Name": input.val(),
                     "IsDeleted": false
-                }),
+                };
+            }
+            else {
+                url = "/api/gymactivity/post";
+                data = {
+                    "Id": id,
+                    "Name": input.val(),
+                    "Setting": inputWeight.val(),
+                    "IsDeleted": false
+                };
+            }
+            $.post({
+                url: url,
+                data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
                     //span.html(input.val());
@@ -54,7 +80,9 @@ function editCell(id) {
 
 function cancelEdit(id) {
     var span = $("#span_" + id);
+    var spanWeight = $("#span_weight_" + id);
     var input = $("#input_" + id);
+    var inputWeight = $("#input_weight_" + id);
     var button = $("#btn_" + id);
     var cancel = $("#cancel_" + id); span.show();
     var del = $("#del_" + id);
@@ -69,6 +97,10 @@ function cancelEdit(id) {
     else {
         input.hide();
         cancel.hide();
+        if (inputWeight.length > 0) {
+            spanWeight.show();
+            inputWeight.hide();
+        }
         del.show();
         button.html('Edit');
         deleteButtons.show();
@@ -77,13 +109,20 @@ function cancelEdit(id) {
 
 }
 
-function addNew() {
+function addNew(isGymActivity) {
     var guid = uuidv4();
     var str = ` <tr id="tr_` + guid + `" isnew="true">
         <td style="width: 300px;">
                 <span id="span_` + guid + `"></span>
                 <input type="text" id="input_` + guid + `" value="" style="display:none" onkeydown="onInputKeyDown(event, '` + guid + `');" />
-        </td>
+        </td>`;
+    if (isGymActivity) {
+        str += ` <td class="weight">
+                    <span id="span_weight_` + guid + `"></span>
+                    <input type="text" id="input_weight_` + guid + `" value="" style="display:none" class="weight" onkeydown="onInputKeyDown(event, '` + guid + `')" />
+                </td>`
+    }
+        str += `
         <td>
                 <button id="btn_` + guid + `" class="btn btn-primary edit-save" onclick="editCell('` + guid + `')">Edit</button>
                 <button id="cancel_` + guid + `" class="btn btn-secondary" onclick="cancelEdit('` + guid + `')" style="display:none">Cancel</button>
@@ -97,9 +136,18 @@ function addNew() {
 }
 
 function deleteRow(id, name) {
+    var inputWeight = $("#input_weight_" + id);
+    var url;
+    if (inputWeight.length = 0) {
+        url = "/api/activity/delete";
+    }
+    else {
+        url = "/api/gymactivity/delete";
+    }
+
     if (confirm("Are you sure you want to remove activity '" + name + "'?")) {
         $.ajax({
-            url: "/api/activity/delete/" + id,
+            url: url + "/" + id,
             type: 'DELETE',
             contentType: "application/json; charset=utf-8",
             success: function (result) {

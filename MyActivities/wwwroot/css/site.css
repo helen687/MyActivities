@@ -39,3 +39,13 @@ td.today {
 .edit-save {
     width: 55px;
 }
+.list td {
+    padding: 6px;
+    align-content: center;
+}
+.weight {
+    width: 50px;
+}
+.weight input {
+    width: 40px;
+}

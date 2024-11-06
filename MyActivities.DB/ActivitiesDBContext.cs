@@ -13,6 +13,8 @@ namespace MyActivities.DB
         public DbSet<Activity> Activities { get; set; }
         public DbSet<DayActivity> DayActivities { get; set; }
 
+        public DbSet<GymActivity> GymActivities { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,6 +23,9 @@ namespace MyActivities.DB
             });
             modelBuilder.Entity<DayActivity>(entity => {
                 entity.HasKey(da => da.Id);
+            });
+            modelBuilder.Entity<GymActivity>(entity => {
+                entity.HasKey(ga => ga.Id);
             });
         }
     }
