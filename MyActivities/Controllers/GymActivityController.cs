@@ -28,9 +28,16 @@ namespace MyActivities.Controllers
                 if (existingActivity != null)
                 {
                     existingActivity.Name = gymActivity.Name;
+                    if (existingActivity.Setting != gymActivity.Setting) {
+                        var gymActivityHistory = new GymActivityHistory();
+                        gymActivityHistory.Id = new Guid();
+                        gymActivityHistory.Date = DateTime.Now;
+                        gymActivityHistory.NewSetting = gymActivity.Setting;
+                        gymActivityHistory.GymActivityId = gymActivity.Id;
+                        _context.GymActivityHistories.Add(gymActivityHistory);
+                    }
                     existingActivity.Setting = gymActivity.Setting;
-
-                    _context.GymActivities.Update(existingActivity);
+                    _context.GymActivities.Update(existingActivity);               
                     _context.SaveChanges();
                     return true;
                 }
@@ -40,8 +47,15 @@ namespace MyActivities.Controllers
                     newGymActivity.Id = gymActivity.Id;
                     newGymActivity.Name = gymActivity.Name;
                     newGymActivity.Setting = gymActivity.Setting;
-
                     _context.GymActivities.Add(newGymActivity);
+
+                    var gymActivityHistory = new GymActivityHistory();
+                    gymActivityHistory.Id = new Guid();
+                    gymActivityHistory.Date = DateTime.Now;
+                    gymActivityHistory.NewSetting = gymActivity.Setting;
+                    gymActivityHistory.GymActivityId = gymActivity.Id;
+                    _context.GymActivityHistories.Add(gymActivityHistory);
+
                     _context.SaveChanges();
                     return true;
                 }
