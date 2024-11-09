@@ -24,6 +24,7 @@ namespace MyActivities.Controllers
         {
             try
             {
+                using var transaction = _context.Database.BeginTransaction();
                 var existingActivity = _context.GymActivities.Where(a => a.Id == gymActivity.Id).FirstOrDefault();
                 if (existingActivity != null)
                 {
@@ -31,7 +32,7 @@ namespace MyActivities.Controllers
                     if (existingActivity.Setting != gymActivity.Setting) {
                         var gymActivityHistory = new GymActivityHistory();
                         gymActivityHistory.Id = new Guid();
-                        gymActivityHistory.Date = DateTime.Now;
+                        gymActivityHistory.DateTime = DateTime.Now;
                         gymActivityHistory.NewSetting = gymActivity.Setting;
                         gymActivityHistory.GymActivityId = gymActivity.Id;
                         _context.GymActivityHistories.Add(gymActivityHistory);
@@ -39,7 +40,6 @@ namespace MyActivities.Controllers
                     existingActivity.Setting = gymActivity.Setting;
                     _context.GymActivities.Update(existingActivity);               
                     _context.SaveChanges();
-                    return true;
                 }
                 else
                 {
@@ -51,14 +51,15 @@ namespace MyActivities.Controllers
 
                     var gymActivityHistory = new GymActivityHistory();
                     gymActivityHistory.Id = new Guid();
-                    gymActivityHistory.Date = DateTime.Now;
+                    gymActivityHistory.DateTime = DateTime.Now;
                     gymActivityHistory.NewSetting = gymActivity.Setting;
                     gymActivityHistory.GymActivityId = gymActivity.Id;
                     _context.GymActivityHistories.Add(gymActivityHistory);
 
                     _context.SaveChanges();
-                    return true;
                 }
+                transaction.Commit();
+                return true;
             }
             catch (Exception ex)
             {
