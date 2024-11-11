@@ -19,6 +19,19 @@ namespace MyActivities.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        [Route("{gymActivityId:Guid}")]
+        public List<GymActivityHistory> GetHistory(Guid gymActivityId)
+        {
+            if (gymActivityId != Guid.Empty)
+                return _context.GymActivityHistories
+                    .Where(gah => gah.GymActivityId == gymActivityId)
+                    .OrderByDescending(gah => gah.DateTime)
+                    .ToList();
+            else
+                return [];
+        }
+
         [HttpPost]
         public bool Post(GymActivity gymActivity)
         {

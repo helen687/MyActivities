@@ -199,3 +199,26 @@ function onInputKeyDown(e, activityId) {
         cancelEdit(activityId);
     }
 }
+
+function onActivityChange() {
+    var selectObj = $("#selActivity");
+    $.ajax({
+        url: "/api/gymactivity/gethistory/" + selectObj.val(),
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            if (result.length) {
+                var str = '<table>';
+                for (var i = 0; i < result.length; i++) {
+                    str += '<tr><td>' + moment(result[i].dateTime).format('MMM DD YYYY, h:mm a') + '</td><td class="setting">' + result[i].newSetting + '</td></tr>'
+                }
+                str + '</table>'
+            }
+            else
+                str = '';
+            $('#divResult').html(str);
+        },
+        error: function (xhr, status, error) {
+            alert(xhr.responseText);
+        }
+    });
+}

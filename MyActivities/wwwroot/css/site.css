@@ -49,3 +49,10 @@ td.today {
 .weight input {
     width: 40px;
 }
+#divResult {
+    padding-top: 20px;
+}
+    #divResult td.setting {
+        width: 70PX;
+        text-align: right;
+    }

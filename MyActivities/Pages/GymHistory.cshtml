@@ -1,0 +1,19 @@
+﻿@page
+@model GymHistoryModel
+@{
+    ViewData["Title"] = "Gym History";
+}
+
+<div class="row">
+    <h4 class="mb-3 ml-5">Gym History:</h4>
+</div>
+
+<select id="selActivity" onchange="onActivityChange()">
+    <option value="00000000-0000-0000-0000-000000000000"></option>
+@foreach (var activity in Model.GymActivities)
+{
+    <option value="@activity.Id">@activity.Name</option>
+}
+</select>
+<div id="divResult"></div>
+
