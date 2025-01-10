@@ -4,20 +4,20 @@ using MyActivities.DB;
 
 namespace MyActivities.Pages
 {
-    public class IndexModel : PageModel
+    public class MyDayGymModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly ActivitiesDBContext _context;
 
-        public IndexModel(ILogger<IndexModel> logger, ActivitiesDBContext context)
+        public MyDayGymModel(ILogger<IndexModel> logger, ActivitiesDBContext context)
         {
             _logger = logger;
             _context = context;
         }
-        public IEnumerable<Activity> Activities { get; set; } = Enumerable.Empty<Activity>();
+        public IEnumerable<GymActivity> GymActivities { get; set; } = Enumerable.Empty<GymActivity>();
         public void OnGet()
         {
-            Activities = _context.Activities.Where(a => a.IsDeleted == false).OrderBy(a => a.Name).ToList();
+            GymActivities = _context.GymActivities.Where(a => a.IsDeleted == false).OrderBy(a => a.Name).ToList();
         }
 
         public IEnumerable<DateTime> GetDays()
@@ -40,14 +40,14 @@ namespace MyActivities.Pages
             return day.ToString("yyyy-MM-dd");
         }
 
-        public string GetCheckboxId(Activity activity, DateTime day)
+        public string GetCheckboxId(GymActivity gymActivity, DateTime day)
         {
-            return "chk_" + activity.Id + "_" + @day.ToString("yyyy-MM-dd");
+            return "chk_" + gymActivity.Id + "_" + @day.ToString("yyyy-MM-dd");
         }
 
-        public string ISChecked(Activity activity, DateTime day)
+        public string ISChecked(GymActivity gymActivity, DateTime day)
         {
-            var checkd = _context.DayActivities.Any(da => da.ActivityId == activity.Id && da.Date.Year == day.Year && da.Date.Month == day.Month && da.Date.Day == day.Day);
+            var checkd = _context.DayGymActivities.Any(dga => dga.GymActivityId == gymActivity.Id && dga.Date.Year == day.Year && dga.Date.Month == day.Month && dga.Date.Day == day.Day);
             return checkd ? "checked" : "";
         }
 

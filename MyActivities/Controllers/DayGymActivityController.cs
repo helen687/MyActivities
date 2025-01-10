@@ -7,38 +7,38 @@ namespace MyActivities.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class DayActivityController : Controller
+    public class DayGymActivityController : Controller
     {
-        private readonly ILogger<DayActivityController> _logger;
+        private readonly ILogger<DayGymActivityController> _logger;
         private readonly ActivitiesDBContext _context;
 
-        public DayActivityController(ILogger<DayActivityController> logger, ActivitiesDBContext context)
+        public DayGymActivityController(ILogger<DayGymActivityController> logger, ActivitiesDBContext context)
         {
             _logger = logger;
             _context = context;
         }
 
         [HttpPost]
-        [Route("{activityId}/{day}")]
-        public bool Post(Guid activityId, DateTime day)
+        [Route("{gymActivityId}/{day}")]
+        public bool Post(Guid gymActivityId, DateTime day)
         {
             try
             {
-                var existingDayActivity = _context.DayActivities.Where(da => da.ActivityId == activityId && da.Date.Year == day.Year && da.Date.Month == day.Month && da.Date.Day == day.Day).FirstOrDefault();
+                var existingDayActivity = _context.DayGymActivities.Where(da => da.GymActivityId == gymActivityId && da.Date.Year == day.Year && da.Date.Month == day.Month && da.Date.Day == day.Day).FirstOrDefault();
                 if (existingDayActivity != null)
                 {
-                    _context.DayActivities.Remove(existingDayActivity);
+                    _context.DayGymActivities.Remove(existingDayActivity);
                     _context.SaveChanges();
                     return true;
                 }
                 else
                 {
-                    var newDayActivity = new DayActivity();
-                    newDayActivity.ActivityId = activityId;
-                    newDayActivity.Date = day;
-                    newDayActivity.Id = new Guid();
+                    var newDayGymActivity = new DayGymActivity();
+                    newDayGymActivity.GymActivityId = gymActivityId;
+                    newDayGymActivity.Date = day;
+                    newDayGymActivity.Id = new Guid();
 
-                    _context.DayActivities.Add(newDayActivity);
+                    _context.DayGymActivities.Add(newDayGymActivity);
                     _context.SaveChanges();
                     return true;
                 }

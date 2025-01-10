@@ -37,7 +37,7 @@ function editCell(id) {
                 "IsDeleted": false
             };
 
-            if (spanWeight.length = 0) {
+            if (spanWeight.length == 0) {
                 url = "/api/activity/post";
                 data = {
                     "Id": id,
@@ -180,6 +180,22 @@ function checkDayActivity(activityId, day) {
 
     $.post({
         url: "/api/dayactivity/post/" + activityId + '/' + strDate,
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            return true;
+        },
+        error: function (xhr, status, error) {
+            return false;
+        }
+    });
+}
+
+function checkDayGymActivity(gymActivityId, day) {
+    let objDate = new Date(day);
+    let strDate = objDate.toISOString().split('T')[0];
+
+    $.post({
+        url: "/api/daygymactivity/post/" + gymActivityId + '/' + strDate,
         contentType: "application/json; charset=utf-8",
         success: function (result) {
             return true;

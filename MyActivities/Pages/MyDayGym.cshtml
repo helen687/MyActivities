@@ -1,0 +1,26 @@
+﻿@page
+@model MyActivities.Pages.MyDayGymModel
+@{
+    ViewData["Title"] = "My Gym";
+}
+<table class="grid">
+    <tr>
+        <tr> 
+            <td></td>
+            @foreach (var day in Model.GetDays())
+            {
+            <td>@Model.DayToString(day)</td>
+            }
+        </tr>
+    </tr>
+    @foreach (var gymActivity in Model.GymActivities)
+{
+        <tr>
+            <td>@gymActivity.Name</td>
+            @foreach (var day in Model.GetDays())
+            {
+                <td align="center" class="@Model.GetTdClass(day)"><input type="checkbox" id="@Model.GetCheckboxId(gymActivity, day)" @Model.ISChecked(gymActivity, day) onclick="return checkDayGymActivity('@gymActivity.Id', '@Model.DayToUniversalString(day)')" /></td>
+            }
+        </tr>
+}
+</table>
